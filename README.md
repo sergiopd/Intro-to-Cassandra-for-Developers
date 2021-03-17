@@ -6,9 +6,7 @@ It doesn't matter if you join our workshop live or you prefer to do at your own 
 
 - Materials used during presentations
 - Hands-on exercises
-- Workshop videos
-  - [First workshop](https://youtu.be/Zf1TTwD4ibQ) [NAM Time]
-  - [Second workshop](https://youtu.be/pVLN6FsUeyo) [IST Time]
+- [Workshop video](https://www.youtube.com/watch?v=pVLN6FsUeyo)
 - [Discord chat](https://bit.ly/cassandra-workshop)
 - [Questions and Answers](https://community.datastax.com/)
 
@@ -24,84 +22,41 @@ It doesn't matter if you join our workshop live or you prefer to do at your own 
 
 ## 1. Create your Astra instance
 
-`ASTRA` service is available at url [https://astra.datastax.com](https://astra.datastax.com/). `ASTRA` is the simplest way to run Cassandra with zero operations at all - just push the button and get your cluster. `Astra` offers **10 Gb Tier Free Forever** and you **don't need a credit card** or anything to sign-up and use it. 
+`ASTRA` service is available at url [https://astra.datastax.com](https://dtsx.io/workshop). `ASTRA` is the simplest way to run Cassandra with zero operations at all - just push the button and get your cluster. No credit card required, $25.00 USD credit every month, roughly 5M writes, 30M reads, 40GB storage monthly - sufficient to run small production workloads.
 
-**✅ Step 1a. Register (if needed) and Sign In to Astra** : You can use your `Github`, `Google` accounts or register with an `email`
+**✅ Step 1a. Register (if needed) and Sign In to Astra** : You can use your `Github`, `Google` accounts or register with an `email`.
 
-- [Registration Page](https://astra.datastax.com/register)
+Make sure to chose a password with minimum 8 characters, containing upper and lowercase letters, at least one number and special character
+
+- [Registration Page](https://dtsx.io/workshop)
 
 ![Registration Image](images/astra-create-register.png?raw=true)
 
-- [Authentication Page](https://astra.datastax.com/)
+- [Authentication Page](https://dtsx.io/workshop)
 
 ![Login Image](images/astra-create-login.png?raw=true)
 
 
-**✅ Step 1b. Fill the Create New Database Form**
+**✅ Step 1b. Create a "pay as you go" plan**
 
-As you don't have have any instances the login will route through the instance creation form. You will find below which values to enter for each field.
+Follow this [guide](https://docs.datastax.com/en/astra/docs/creating-your-astra-database.html) and use the values provided below, to set up a pay as you go database with a free $25 monthly credit.
 
-![Database Form](images/astra-create-2.png?raw=true)
-
-
-- **Set the Compute Size**: For the work we are doing please use `Free tier`. You instance will be there forever, free of charge
-
-- **Select the region**: This is the region where your database will reside physically (choose one close to you or your users). For people in EMEA please use `europe-west-1` idea here is to reduce latency.
-
-- **Fill in the database name** - `killrvideocluster.` While Astra allows you to fill in these fields with values of your own choosing, please follow our reccomendations to make the rest of the exercises easier to follow. If you don't, you are on your own! :)
-
-- **Fill in the keyspace name** - `killrvideo`. It's really important that you use the name killrvideo (with no 'e' in "killr") here in order for all the exercises to work well. We realize you want to be creative, but please just roll with this one today.
-
-- **Fill in the Database User name** - `KVUser`. Note the user name is case-sensitive. Please use the case we suggest here.
-
-- **Fill in the password** - `KVPassword`. Fill in both the password and the confirmation fields. Note that the password is also case-sensitive. Please use the case we suggest here.
-
-- **Launch the database**. Review all the fields to make sure they are as shown, and click the Launch Database button.
-
-
-![Launch Database](images/astra-create-3.png?raw=true)
-
-
-**✅ Step 1c. View your Database and connect**
-
-View your database. It should only take ```2-3 minutes``` for your database to spin up, however, it could take up to around 10 minutes in some cases. You will receive an email once the database is ready.
-
-![View Database](images/astra-create-4.png?raw=true)
-
-
-Once Database is ready you should see the following home page:
-
-![Home Page](images/astra-create-5.png?raw=true)
-
-
-Let’s review the database you have configured. In the box on the left side of the window, you can see the database and keyspace name metadata. The box on the right describes the size and location of your database along with your estimated cost. Once Astra initializes the database completely, the left box will have connection details. Once you are at this point you have a database ready to go. We'll start using it in the next section.
-
-
-[🏠 Back to Table of Contents](#table-of-contents)
-
+| Parameter | Value 
+|---|---|
+| Database name | killrvideocluster |
+| Keyspace name | killrvideo |
 
 ## 2. Create a table
 Ok, now that you have a database created the next step is to create a table to work with. 
 
 **✅ Step 2a. Navigate to the CQL Console and login to the database**
 
-Go back to the Astra UI we left earlier and click on the **_CQL Console_** button in the top right corner of the screen.
+In the Summary screen for your database, select **_CQL Console_** from the top menu in the main window. This will take you to the CQL Console and automatically log you in.
 
-![CQL Console Button](images/astra-use-cql-console.png?raw=true)
-
-This will open up a CQL console to use with your Astra database and present you with a login prompt.
-
-![CQL Console](images/astra-view-cql-console.png?raw=true)
-
-Enter in the credentials we used earlier to create the **_killrvideo_** database. If you followed the instructions earlier this should be **_KVUser_** and **_KVPassword_**. If you already created the **_killrvideo_** database at some point before this workshop and used different credentials, just use those instead.
-
-At this point you should see something like the following:
-
-![CQL Console logged in](images/astra-login-cql-console.png?raw=true)
 
 **✅ Step 2b. Describe keyspaces and USE killrvideo**
 
-Ok, you're logged in, and now we're ready to rock. Creating tables is quite easy, but before we create one we need to tell the database which keyspace we are working with.
+Ok, now we're ready to rock. Creating tables is quite easy, but before we create one we need to tell the database which keyspace we are working with.
 
 First, let's **_DESCRIBE_** all of the keyspaces that are in the database. This will give us a list of the available keyspaces.
 
@@ -113,7 +68,7 @@ _"desc" is short for "describe", either is valid_
 
 📗 **Expected output**
 
-![Desc keyspaces](images/astra-use-cql-console-desc-keyspace.png?raw=true)
+<img width="1000" alt="Screenshot 2020-09-30 at 13 54 55" src="https://user-images.githubusercontent.com/20337262/94687725-8cbf8600-0324-11eb-83b0-fbd3d7fbdadc.png">
 
 Depending on your setup you might see a different set of keyspaces then in the image. The one we care about for now is **_killrvideo_**. From here, execute the **_USE_** command with the **_killrvideo_** keyspace to tell the database our context is within **_killrvideo_**.
 
@@ -124,7 +79,7 @@ use killrvideo;
 
 📗 **Expected output**
 
-![Use keyspaces](images/astra-use-cql-console-use-killrvideo.png?raw=true)
+<img width="1000" alt="Screenshot 2020-09-30 at 13 55 56" src="https://user-images.githubusercontent.com/20337262/94687832-b082cc00-0324-11eb-885a-d44e127cf9be.png">
 
 Notice how the prompt displays ```KVUser@cqlsh:killrvideo>``` informing us we are **using** the **_killrvideo_** keyspace. Now we are ready to create our table.
 
@@ -155,7 +110,7 @@ desc tables;
 
 📗 **Expected output**
 
-![Create users by city table](images/astra-use-cql-console-create-users-by-city.png?raw=true)
+<img width="1000" alt="Screenshot 2020-09-30 at 13 57 32" src="https://user-images.githubusercontent.com/20337262/94687995-e88a0f00-0324-11eb-8c7a-08c3dee00eaf.png">
 
 Aaaand **BOOM**, you created a table in your database. That's it. Now, we'll move to the next section in the presentation and break down the method used to create a data model with Apache Cassandra.
 
@@ -198,7 +153,7 @@ desc tables;
 
 📗 **Expected output**
 
-![Create users by city table](images/astra-use-cql-console-create-tables.png?raw=true)
+<img width="1000" alt="Screenshot 2020-09-30 at 13 59 50" src="https://user-images.githubusercontent.com/20337262/94688257-3bfc5d00-0325-11eb-9ec6-40d2596fb71e.png">
 
 **✅ Step 3b. (C)RUD = create = insert data**
 
@@ -293,7 +248,7 @@ SELECT * FROM comments_by_video;
 
 📗 **Expected output**
 
-![Select from tables](images/astra-use-cql-console-select-from-tables.png?raw=true)
+<img width="1000" alt="Screenshot 2020-09-30 at 14 03 18" src="https://user-images.githubusercontent.com/20337262/94688606-bb8a2c00-0325-11eb-8124-5c4d9ac0d4fc.png">
 
 Once you execute the above **SELECT** statements you should see something like the expected output above. We have now **READ** the data we **INSERTED** earlier. Awesome job!
 
@@ -354,7 +309,7 @@ SELECT * FROM comments_by_video;
 
 📗 **Expected output**
 
-![Update comments by video](images/astra-use-cql-console-update-comments-by-video.png?raw=true)
+<img width="1000" alt="Screenshot 2020-09-30 at 14 05 21" src="https://user-images.githubusercontent.com/20337262/94688803-0015c780-0326-11eb-96e3-b76fb59a9d11.png">
 
 That's it. All that's left now is to **DELETE** some data.
 
@@ -377,9 +332,18 @@ SELECT * FROM comments_by_video;
 
 📗 **Expected output**
 
-![Delete from comments by video](images/astra-use-cql-console-delete-from-comments-by-video.png?raw=true)
+<img width="1000" alt="Screenshot 2020-09-30 at 14 07 05" src="https://user-images.githubusercontent.com/20337262/94689019-3eab8200-0326-11eb-86b9-010c130a49c3.png">
 
 Notice the row is now removed from the comments_by_video table, it's as simple as that.
 
 ## 4. Wrapping up
 We've just scratched the surface of what you can do using DataStax Astra with Apache Cassandra. Go take a look at [DataStax for Developers](https://www.datastax.com/dev) to see what else is possible. There's plenty to dig into!
+
+## Homework
+Complete the following short courses on [DataStax for Developers](https://www.datastax.com/dev) and [submit](https://github.com/DataStax-Academy/Intro-to-Cassandra-for-Developers/issues) a screenshot of your completion for a community badge!
+
+[Cassandra Query Language](https://www.datastax.com/dev/scenario/try-it-out-cassandra-query-language-cql)
+
+[Cassandra Data Modeling](https://www.datastax.com/node/3272)
+
+[Submit Homework](https://github.com/DataStax-Academy/Intro-to-Cassandra-for-Developers/issues)
